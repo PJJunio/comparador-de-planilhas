@@ -56,41 +56,25 @@ def comparar():
 
         max_row = max(ws1.max_row, ws2.max_row)
 
+        cols_comparar = {1, 5}
+
         for row in range (1, max_row + 1):
+            valores1 = {c: str(ws1.cell(row=row, column=c).value or "") for c in range (1, 6)}
+            valores2 = {c: str(ws2.cell(row=row, column=c).value or "") for c in range (1, 6)}
 
-            valor1_1 = ws1.cell(row=row, column=1).value
-            valor1_2 = ws1.cell(row=row, column=2).value
-            valor1_3 = ws1.cell(row=row, column=3).value
-            valor1_4 = ws1.cell(row=row, column=4).value
-            valor1_5 = ws1.cell(row=row, column=5).value
+            for c in range (1, 6):
+                ws_saida.cell(row=row, column=c, value=valores1[c])
+                ws_saida.cell(row=row, column=c+6, value=valores2[c])
 
-            valor2_1 = ws2.cell(row=row, column=1).value
-            valor2_2 = ws2.cell(row=row, column=2).value
-            valor2_3 = ws2.cell(row=row, column=3).value
-            valor2_4 = ws2.cell(row=row, column=4).value
-            valor2_5 = ws2.cell(row=row, column=5).value
-
-            ws_saida.cell(row=row, column=1, value=valor1_1)
-            ws_saida.cell(row=row, column=2, value=valor1_2)
-            ws_saida.cell(row=row, column=3, value=valor1_3)
-            ws_saida.cell(row=row, column=4, value=valor1_4)
-            ws_saida.cell(row=row, column=5, value=valor1_5)
-
-            ws_saida.cell(row=row, column=7, value=valor2_1)
-            ws_saida.cell(row=row, column=8, value=valor2_2)
-            ws_saida.cell(row=row, column=9, value=valor2_3)
-            ws_saida.cell(row=row, column=10, value=valor2_4)
-            ws_saida.cell(row=row, column=11, value=valor2_5)
+            if all (valores1[c] == valores2[c] for c in cols_comparar):
+                for col in list(range(1, 6)) + list(range(7, 12)):
+                    celula = ws_saida.cell(row=row, column=col)
+                    celula.fill = fill_amarelo
 
             for col in range(1, 12):
                 celula = ws_saida.cell(row=row, column=col)
                 if celula.value is not None:
                     celula.border = borda
-            
-            if valor1_1 == valor2_1 and valor1_5 == valor2_5:
-                for col in [1, 2, 3, 4, 5, 7, 8, 9, 10, 11]:
-                    celula = ws_saida.cell(row=row, column=col)
-                    celula.fill = fill_amarelo
 
         for col in ws_saida.columns:
             max_length = 0
